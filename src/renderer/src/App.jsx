@@ -6,7 +6,7 @@ function App() {
     <>
       <MemoryRouter>
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </MemoryRouter>
     </>
@@ -14,4 +14,3 @@ function App() {
 }
 
 export default App
-

@@ -43,12 +43,11 @@ const handleCreateServer = (url) => {
     const port = parsedUrl.port
     createServer(hostname, port)
     return `Server created at port ${url}`
-  } catch(e) {
+  } catch (e) {
     if (e instanceof TypeError) {
-      throw new Error("Invalid URL")
+      throw new Error('Invalid URL')
     }
   }
-  
 }
 
 // This method will be called when Electron has finished
@@ -58,7 +57,7 @@ app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
-  ipcMain.handle("server:create", (_, url) => handleCreateServer(url))
+  ipcMain.handle('server:create', (_, url) => handleCreateServer(url))
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

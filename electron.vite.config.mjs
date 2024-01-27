@@ -13,7 +13,7 @@ export default defineConfig({
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src'),
-        '@mui/material': '@mui/joy',
+        '@mui/material': '@mui/joy'
       }
     },
     plugins: [react()]
