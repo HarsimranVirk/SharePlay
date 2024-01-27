@@ -4,7 +4,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
-  createServer: () => ipcRenderer.invoke("server:create")
+  createServer: (url) => ipcRenderer.invoke("server:create", url)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

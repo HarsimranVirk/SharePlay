@@ -23,9 +23,12 @@ import { useState } from "react";
 const steps = ["Host or Join", "Add videos", "Let's go!"]
 
 export default function () {
-    const snackbar = useSnackbar(1000)
+    const snackbar = useSnackbar(1500)
     const [activeStep, setActiveStep] = useState(1)
-    const [serverLink, setServerLink] = useState("http://0.0.0.0/8196")
+    const [serverLink, setServerLink] = useState("http://0.0.0.0:8196")
+    const [message, setMessage] = useState();
+    const [color, setColor] = useState();
+
     return (
         <Sheet sx={{
             position: "fixed",
@@ -83,16 +86,27 @@ export default function () {
                             <ButtonGroup spacing={1}>
                                 <Tooltip title="Host the session if you have the file.">
                                     <Button onClick={
-                                        () => window.api.createServer().then(s => {
-                                            snackbar.setMessage(s)
-                                            snackbar.setColor("success")
-                                            snackbar.setOpen(true)
-                                            setActiveStep(2)
-                                        })
+                                        () => window.api.createServer(serverLink)
+                                            .then(s => {
+                                                snackbar.setMessage(s)
+                                                snackbar.setColor("success")
+                                                snackbar.setOpen(true)
+                                                setActiveStep(2)
+                                            })
+                                            .catch(e => {
+                                                if (e.message.includes("Invalid URL"))
+                                                    snackbar.setMessage("Invalid URL, please try again!")
+                                                snackbar.setColor("danger")
+                                                snackbar.setOpen(true)
+                                            })
                                     }>Host</Button>
                                 </Tooltip>
                                 <Tooltip title="Join a session">
-                                    <Button>Join</Button>
+                                    <Button
+                                        onClick={() => {
+                                            fetch(serverLink).then(res => res.json()).then(res => console.log(res))
+                                        }}
+                                    >Join</Button>
                                 </Tooltip>
                             </ButtonGroup>
                         </CardActions>
@@ -103,7 +117,7 @@ export default function () {
 
 
             <Snackbar
-                variant="solid"
+                variant="soft"
                 color={snackbar.color}
                 autoHideDuration={1000}
                 resumeHideDuration={snackbar.left}
@@ -111,7 +125,7 @@ export default function () {
                 onMouseLeave={snackbar.handleResume}
                 onFocus={snackbar.handlePause}
                 onBlur={snackbar.handleResume}
-                onUnmount={() => setLeft(undefined)}
+                onUnmount={() => snackbar.setLeft(undefined)}
                 open={snackbar.open}
                 onClose={() => snackbar.setOpen(false)}
             >

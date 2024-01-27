@@ -32,6 +32,7 @@ export default function(duration) {
         message,
         color,
         setColor,
+        setLeft,
         setMessage,
         setOpen,
         handlePause,
