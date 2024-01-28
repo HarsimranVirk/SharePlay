@@ -1,28 +1,44 @@
 import express from 'express'
 import cors from 'cors'
 import expressWs from 'express-ws'
+import { app as electronApp } from 'electron' 
+import { serve, setup } from 'swagger-ui-express'
+import { router } from './routes'
+import YAML from 'yamljs'
+import spec from "../../resources/openapi.spec.yaml?asset"
 
 const server = {
   app: null,
   httpServer: null
 }
 
-const defineRoutes = (app) => {
+function defineRoutes(app) {
   app.use(cors())
-  app.get('/', (req, res) => {
-    res.json({ api: 'share-play-v1', version: 0.1 })
-  })
+  app.use("/", router)
+  
+  if (!electronApp.isPackaged) {
+    const specDoc = YAML.load(spec)
+    app.use(
+      "/api-docs",
+      serve,
+      setup(specDoc)
+    )
+  }
 
   return app
 }
 
-const createServer = (hostname, port) => {
-  if (server.httpServer != null) {
-    server.httpServer.close(() => console.log('Server shutdown'))
-  }
+function createServer(hostname, port) {
+  closeServer()
   server.app = express()
   const app = defineRoutes(server.app)
   server.httpServer = app.listen(port, hostname)
 }
 
-export { createServer }
+function closeServer() {
+  if (server.app !== null && server.httpServer !== null) {
+    server.httpServer.close(() => console.log("Server shutdown"))
+  }
+}
+
+export { createServer, closeServer }

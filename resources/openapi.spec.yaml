@@ -1,0 +1,21 @@
+openapi: "3.0.0"
+info:
+  title: Share Play
+  description: Share Play api for watching videos together
+  version: "0.1"
+paths:
+  /:
+    get:
+      summary: Returns share-play api info
+      responses:
+        200:
+          description: Returns share-play api info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  api:
+                    type: string
+                  version:
+                    type: number
