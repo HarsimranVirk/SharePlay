@@ -19,3 +19,29 @@ paths:
                     type: string
                   version:
                     type: number
+  /add:
+    post:
+      summary: Add a video file to serve
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filepath:
+                  type: string
+      responses:
+        200:
+          description: Returns the checksum of the file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  checksum:
+                    type: string
+                  filepath:
+                    type: string
+                  lastModified:
+                    type: string

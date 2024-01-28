@@ -13,6 +13,7 @@ const server = {
 }
 
 function defineRoutes(app) {
+  app.use(express.json())
   app.use(cors())
   app.use("/", router)
   
