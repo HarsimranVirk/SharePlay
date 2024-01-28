@@ -92,10 +92,12 @@ router.patch('/videos', async (req, res) => {
       removed: true
     })
   }
-  res.json({
-    checksum,
-    removed: false
-  })
+  else {
+    res.json({
+      checksum,
+      removed: false
+    })
+  }
 })
 
 export { router }

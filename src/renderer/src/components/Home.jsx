@@ -76,6 +76,23 @@ export default function () {
     })
   }
 
+  const deleteFile = (checksum) => {
+    fetch(`${serverLink}/videos`, {
+      method: 'PATCH',
+      cors: `${serverLink}`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ checksum })
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.removed) {
+          fetchAllFiles()
+        }
+      })
+  }
+
   return (
     <>
       <Grid
@@ -211,7 +228,10 @@ export default function () {
                         <Stack spacing={1} sx={{ p: 2, overflow: 'auto', height: '50%' }}>
                           {allFiles &&
                             Object.entries(allFiles).map(([chksum, fileData]) => (
-                              <FileCardHost filename={fileData.filepath.split(/(\\|\/)/g).pop()} />
+                              <FileCardHost
+                                filename={fileData.filepath.split(/(\\|\/)/g).pop()}
+                                deleteFile={() => deleteFile(chksum)}
+                              />
                             ))}
                         </Stack>
                         <Stack direction="row-reverse" sx={{ p: 2 }}>
