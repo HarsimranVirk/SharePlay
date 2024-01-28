@@ -8,7 +8,7 @@ function App() {
   const [host, setHost] = useState(false)
   return (
     <>
-      <HostContext.Provider value={{host, setHost}}>
+      <HostContext.Provider value={{ host, setHost }}>
         <MemoryRouter>
           <Routes>
             <Route path="/" element={<Home />} />

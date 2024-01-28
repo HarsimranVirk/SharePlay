@@ -1,9 +1,6 @@
 import {
   Grid,
   Sheet,
-  Card,
-  CardContent,
-  CardActions,
   Input,
   Button,
   ButtonGroup,
@@ -14,11 +11,6 @@ import {
   StepIndicator,
   StepButton,
   Typography,
-  List,
-  Skeleton,
-  ListItem,
-  ListItemContent,
-  ListItemButton,
   Stack,
   Tab,
   Tabs,
@@ -53,68 +45,71 @@ export default function () {
   const fetchAllFiles = () => {
     setAllFilesLoading(true)
     fetch(`${serverLink}/videos`, {
-      method: "GET",
+      method: 'GET'
     })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         setAllFiles(res)
         setAllFilesLoading(false)
       })
   }
 
   const addFile = () => {
-    window.electron.ipcRenderer.invoke("dialog:open")
-      .then(res => {
-        if (!res.canceled) {
-          res.filePaths.forEach(filepath => {
-            console.log(filepath)
-            fetch(`${serverLink}/videos`, {
-              method: "POST",
-              cors: `${serverLink}`,
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ filepath })
-            })
-              .then(() => fetchAllFiles())
-              .catch(e => {
-                showSnackbar("Something went wrong", "danger")
-              })
+    window.electron.ipcRenderer.invoke('dialog:open').then((res) => {
+      if (!res.canceled) {
+        res.filePaths.forEach((filepath) => {
+          console.log(filepath)
+          fetch(`${serverLink}/videos`, {
+            method: 'POST',
+            cors: `${serverLink}`,
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ filepath })
           })
-        }
-      })
-
+            .then(() => fetchAllFiles())
+            .catch((e) => {
+              showSnackbar('Something went wrong', 'danger')
+            })
+        })
+      }
+    })
   }
 
   return (
     <>
-      <Grid container sx={{
-        m: 0, p: 0,
-        position: "fixed",
-        top: 0,
-        left: 0,
-        height: '100%',
-        width: "100%",
-      }} >
+      <Grid
+        container
+        sx={{
+          m: 0,
+          p: 0,
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '100%'
+        }}
+      >
         <Tabs
-          variant='solid'
-          orientation='vertical'
+          variant="solid"
+          orientation="vertical"
           sx={{
             height: '100%',
             width: '100%',
             m: 0,
             p: 0
-          }}>
-          <Grid xs={4} md={3} sx={{ width: '100%', height: "100%", m: 0 }}>
-            <TabList variant='solid' sx={{ width: '100%', height: "100%", m: 0 }}>
+          }}
+        >
+          <Grid xs={4} md={3} sx={{ width: '100%', height: '100%', m: 0 }}>
+            <TabList variant="solid" sx={{ width: '100%', height: '100%', m: 0 }}>
               <Tab>
                 <Typography>Home</Typography>
               </Tab>
             </TabList>
           </Grid>
-          <Grid xs={8} md={9} sx={{height: "100%", m: 0, p: 0}}>
-            <TabPanel variant='soft' sx={{ height: "100%", m: 0, p: 0 }} >
-              <Sheet variant="soft" size="lg" sx={{ height: "100%", m: 0 }}>
+          <Grid xs={8} md={9} sx={{ height: '100%', m: 0, p: 0 }}>
+            <TabPanel variant="soft" sx={{ height: '100%', m: 0, p: 0 }}>
+              <Sheet variant="soft" size="lg" sx={{ height: '100%', m: 0 }}>
                 <Stepper sx={{ p: 4 }}>
                   {steps.map((step, index) => (
                     <Step
@@ -151,18 +146,18 @@ export default function () {
                         Share-Play works only if you can directly connect to the peers.
                       </Typography>
                       <Typography color="neutral">
-                        Consider using <a href="https://tailscale.com/">tailscale</a> if you are behind a
-                        NAT/firewall.
+                        Consider using <a href="https://tailscale.com/">tailscale</a> if you are
+                        behind a NAT/firewall.
                       </Typography>
                     </Stack>
                     <Stack sx={{ p: 8 }} direction="row" spacing={2} justifyContent="center">
                       <Input
-                        size='lg'
+                        size="lg"
                         placeholder="Server link"
                         value={serverLink}
                         onChange={(e) => setServerLink(e.target.value)}
                       ></Input>
-                      <ButtonGroup variant='solid' spacing={1}>
+                      <ButtonGroup variant="solid" spacing={1}>
                         <Tooltip title="Host the session if you have the file.">
                           <Button
                             onClick={() =>
@@ -190,13 +185,13 @@ export default function () {
                               fetch(serverLink)
                                 .then((res) => res.json())
                                 .then((res) => {
-                                  showSnackbar("Connected successfully!", "success")
+                                  showSnackbar('Connected successfully!', 'success')
                                   setHost(false)
                                   setActiveStep(2)
                                   fetchAllFiles()
                                 })
                                 .catch((e) => {
-                                  showSnackbar("Something went wrong", "danger")
+                                  showSnackbar('Something went wrong', 'danger')
                                 })
                             }}
                           >
@@ -211,48 +206,41 @@ export default function () {
                 {activeStep == 2 && (
                   <>
                     {host && (
-                        <>
-                        <Typography sx={{p:2}}>
-                          {host && "Add videos to share"}
-                        </Typography>
-                        <Stack spacing={1} sx={{ p:2, overflow: "auto", height: "50%"}}>
-                        {allFiles && Object.entries(allFiles).map(([chksum, fileData]) => (
-                          <FileCardHost filename={fileData.filepath.split(/(\\|\/)/g).pop()} />
-                        ))}
+                      <>
+                        <Typography sx={{ p: 2 }}>{host && 'Add videos to share'}</Typography>
+                        <Stack spacing={1} sx={{ p: 2, overflow: 'auto', height: '50%' }}>
+                          {allFiles &&
+                            Object.entries(allFiles).map(([chksum, fileData]) => (
+                              <FileCardHost filename={fileData.filepath.split(/(\\|\/)/g).pop()} />
+                            ))}
                         </Stack>
-                        <Stack direction="row-reverse" sx={{ p:2 }}>
-                          <ButtonGroup variant='solid' spacing={1}>
-                            <Button
-                              startDecorator={<AddAPhoto />}
-                              onClick={addFile}
-                            >
+                        <Stack direction="row-reverse" sx={{ p: 2 }}>
+                          <ButtonGroup variant="solid" spacing={1}>
+                            <Button startDecorator={<AddAPhoto />} onClick={addFile}>
                               Add
                             </Button>
-                            <Button >
-                              Continue
-                            </Button>
+                            <Button>Continue</Button>
                           </ButtonGroup>
                         </Stack>
                       </>
                     )}
                     {!host && (
                       <>
-                        <Typography sx={{p: 2}}>
-                          Videos added by the host
-                        </Typography>
-                        <Stack spacing={1} sx={{ p:2, overflow: "auto", height: "50%"}}>
-                          {allFiles && Object.entries(allFiles).map(([chksum, fileData]) => (
-                            <FileCard filename={fileData.filepath.split(/(\\|\/)/g).pop()} key={chksum} />
-                          ))}
+                        <Typography sx={{ p: 2 }}>Videos added by the host</Typography>
+                        <Stack spacing={1} sx={{ p: 2, overflow: 'auto', height: '50%' }}>
+                          {allFiles &&
+                            Object.entries(allFiles).map(([chksum, fileData]) => (
+                              <FileCard
+                                filename={fileData.filepath.split(/(\\|\/)/g).pop()}
+                                key={chksum}
+                              />
+                            ))}
                         </Stack>
-                        <Stack direction="row-reverse" sx={{ p:2 }}>
-                          <ButtonGroup variant='solid' spacing={1}>
-                            <Button >
-                              Continue
-                            </Button>
+                        <Stack direction="row-reverse" sx={{ p: 2 }}>
+                          <ButtonGroup variant="solid" spacing={1}>
+                            <Button>Continue</Button>
                           </ButtonGroup>
                         </Stack>
-
                       </>
                     )}
                   </>
@@ -260,9 +248,7 @@ export default function () {
 
                 {}
               </Sheet>
-
             </TabPanel>
-
           </Grid>
         </Tabs>
       </Grid>
