@@ -7,6 +7,8 @@ paths:
   /:
     get:
       summary: Returns share-play api info
+      tags:
+        - "info"
       responses:
         200:
           description: Returns share-play api info
@@ -19,9 +21,24 @@ paths:
                     type: string
                   version:
                     type: number
-  /add:
+  /videos:
+    get:
+      summary: Get all the added videos
+      tags:
+        - "videos"
+      responses:
+        200:
+          description: Returns an object of all added videos
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/fileMetadata'
     post:
       summary: Add a video file to serve
+      tags:
+        - "videos"
       requestBody:
         required: true
         content:
@@ -37,11 +54,42 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/fileMetadata'
+    patch:
+      summary: Remove a video file
+      tags:
+        - "videos"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checksum:
+                  type: string
+      responses:
+        200:
+          description: Returns the status
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
                   checksum:
                     type: string
-                  filepath:
-                    type: string
-                  lastModified:
-                    type: string
+                  removed:
+                    type: boolean
+components:
+  schemas:
+    fileMetadata:
+      type: object
+      properties:
+        checksum:
+          type: string
+        filepath:
+          type: string
+        lastModified:
+          type: string
+        fileSize:
+          type: number
