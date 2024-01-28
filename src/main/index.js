@@ -1,8 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { createServer } from './server'
+import { closeServer, createServer } from './server'
 
 function createWindow() {
   // Create the browser window.
@@ -58,6 +58,8 @@ app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')
 
   ipcMain.handle('server:create', (_, url) => handleCreateServer(url))
+  ipcMain.handle('server:close', closeServer)
+  ipcMain.handle('dialog:open', () => dialog.showOpenDialog())
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

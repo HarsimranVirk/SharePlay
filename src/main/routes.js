@@ -62,7 +62,7 @@ router.get("/videos", async (req, res) => {
 
 router.post("/videos", async (req, res) => {
     const { filepath } = req.body
-
+    console.log(filepath)
     const checksums = await readChecksums()
 
     Promise.all([getChecksum(filepath), getFileMetadata(filepath)])
