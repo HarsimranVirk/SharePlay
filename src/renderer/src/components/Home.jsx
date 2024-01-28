@@ -27,11 +27,12 @@ import {
 } from '@mui/joy'
 import Check from '@mui/icons-material/Check'
 import InfoOutlined from '@mui/icons-material/InfoOutlined'
-import wavy_lines from '../assets/wavy-lines.svg'
 import useSnackbar from '../hooks/useSnackbar'
 import { useContext, useState } from 'react'
 import { HostContext } from '../App'
 import { AddAPhoto, Delete, Download } from '@mui/icons-material'
+import FileCard from './FileCard'
+import FileCardHost from './FileCardHost'
 
 const steps = ['Host or Join', 'Add videos', "Let's go!"]
 
@@ -61,28 +62,60 @@ export default function () {
       })
   }
 
+  const addFile = () => {
+    window.electron.ipcRenderer.invoke("dialog:open")
+      .then(res => {
+        if (!res.canceled) {
+          res.filePaths.forEach(filepath => {
+            console.log(filepath)
+            fetch(`${serverLink}/videos`, {
+              method: "POST",
+              cors: `${serverLink}`,
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ filepath })
+            })
+              .then(() => fetchAllFiles())
+              .catch(e => {
+                showSnackbar("Something went wrong", "danger")
+              })
+          })
+        }
+      })
+
+  }
+
   return (
     <>
-      <Grid container >
+      <Grid container sx={{
+        m: 0, p: 0,
+        position: "fixed",
+        top: 0,
+        left: 0,
+        height: '100%',
+        width: "100%",
+      }} >
         <Tabs
           variant='solid'
           orientation='vertical'
           sx={{
-            height: '100vh',
-            overflow: "hidden",
-            width: "100vw"
+            height: '100%',
+            width: '100%',
+            m: 0,
+            p: 0
           }}>
-          <Grid xs={4} md={3}>
-            <TabList variant='solid' sx={{ width: '100%' }}>
+          <Grid xs={4} md={3} sx={{ width: '100%', height: "100%", m: 0 }}>
+            <TabList variant='solid' sx={{ width: '100%', height: "100%", m: 0 }}>
               <Tab>
                 <Typography>Home</Typography>
               </Tab>
             </TabList>
           </Grid>
-          <Grid xs={8} md={9}>
-            <TabPanel variant='soft' sx={{ height: "100%" }} >
-              <Sheet variant="soft" size="lg" sx={{ p: 4 }}>
-                <Stepper sx={{ marginBottom: '1.25em' }}>
+          <Grid xs={8} md={9} sx={{height: "100%", m: 0, p: 0}}>
+            <TabPanel variant='soft' sx={{ height: "100%", m: 0, p: 0 }} >
+              <Sheet variant="soft" size="lg" sx={{ height: "100%", m: 0 }}>
+                <Stepper sx={{ p: 4 }}>
                   {steps.map((step, index) => (
                     <Step
                       key={step}
@@ -122,7 +155,7 @@ export default function () {
                         NAT/firewall.
                       </Typography>
                     </Stack>
-                    <Stack direction="row" spacing={2} justifyContent="center">
+                    <Stack sx={{ p: 8 }} direction="row" spacing={2} justifyContent="center">
                       <Input
                         size='lg'
                         placeholder="Server link"
@@ -178,45 +211,20 @@ export default function () {
                 {activeStep == 2 && (
                   <>
                     {host && (
-                      <Stack spacing={2}>
-                        <Typography>
+                        <>
+                        <Typography sx={{p:2}}>
                           {host && "Add videos to share"}
                         </Typography>
+                        <Stack spacing={1} sx={{ p:2, overflow: "auto", height: "50%"}}>
                         {allFiles && Object.entries(allFiles).map(([chksum, fileData]) => (
-                          <Stack direction="row" spacing={3} justifyContent="space-between">
-                            <Typography>{fileData.filepath}</Typography>
-                            <Button variant='outlined'>
-                              <Delete />
-                            </Button>
-                          </Stack>
+                          <FileCardHost filename={fileData.filepath.split(/(\\|\/)/g).pop()} />
                         ))}
-                        <Stack sx={{ flexDirection: "row-reverse" }}>
+                        </Stack>
+                        <Stack direction="row-reverse" sx={{ p:2 }}>
                           <ButtonGroup variant='solid' spacing={1}>
                             <Button
                               startDecorator={<AddAPhoto />}
-                              onClick={() => {
-                                window.electron.ipcRenderer.invoke("dialog:open")
-                                  .then(res => {
-                                    if (!res.canceled) {
-                                      res.filePaths.forEach(filepath => {
-                                        console.log(filepath)
-                                        fetch(`${serverLink}/videos`, {
-                                          method: "POST",
-                                          cors: `${serverLink}`,
-                                          headers: {
-                                            'Content-Type': 'application/json'
-                                          },
-                                          body: JSON.stringify({ filepath })
-                                        })
-                                          .then(() => fetchAllFiles())
-                                          .catch(e => {
-                                            showSnackbar("Something went wrong", "danger")
-                                          })
-                                      })
-                                    }
-                                  })
-
-                              }}
+                              onClick={addFile}
                             >
                               Add
                             </Button>
@@ -225,60 +233,32 @@ export default function () {
                             </Button>
                           </ButtonGroup>
                         </Stack>
-                      </Stack>
+                      </>
                     )}
                     {!host && (
-                      <CardContent>
-                        <Typography>
-                          {host && "Videos added by the host"}
+                      <>
+                        <Typography sx={{p: 2}}>
+                          Videos added by the host
                         </Typography>
-                        {allFiles && Object.entries(allFiles).map(([chksum, fileData]) => (
-                          <CardActions sx={{ flexDirection: "row", justifyContent: "space-between" }} key={chksum}>
-                            <Typography sx={{ wordBreak: "break-all" }}>{fileData.filepath}</Typography>
-                            <Button>
-                              <Download />
-                            </Button>
-                          </CardActions>
-                        ))}
-                        <CardActions sx={{ flexDirection: "row-reverse" }} buttonFlex="0 1 120px">
+                        <Stack spacing={1} sx={{ p:2, overflow: "auto", height: "50%"}}>
+                          {allFiles && Object.entries(allFiles).map(([chksum, fileData]) => (
+                            <FileCard filename={fileData.filepath.split(/(\\|\/)/g).pop()} key={chksum} />
+                          ))}
+                        </Stack>
+                        <Stack direction="row-reverse" sx={{ p:2 }}>
                           <ButtonGroup variant='solid' spacing={1}>
-                            <Button
-                              startDecorator={<AddAPhoto />}
-                              onClick={() => {
-                                window.electron.ipcRenderer.invoke("dialog:open")
-                                  .then(res => {
-                                    if (!res.canceled) {
-                                      res.filePaths.forEach(filepath => {
-                                        console.log(filepath)
-                                        fetch(`${serverLink}/videos`, {
-                                          method: "POST",
-                                          cors: `${serverLink}`,
-                                          headers: {
-                                            'Content-Type': 'application/json'
-                                          },
-                                          body: JSON.stringify({ filepath })
-                                        })
-                                          .then(() => fetchAllFiles())
-                                          .catch(e => {
-                                            showSnackbar("Something went wrong", "danger")
-                                          })
-                                      })
-                                    }
-                                  })
-
-                              }}
-                            >
-                              Add
-                            </Button>
                             <Button >
                               Continue
                             </Button>
                           </ButtonGroup>
-                        </CardActions>
-                      </CardContent>
+                        </Stack>
+
+                      </>
                     )}
                   </>
                 )}
+
+                {}
               </Sheet>
 
             </TabPanel>
