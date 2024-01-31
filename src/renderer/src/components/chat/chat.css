@@ -1,0 +1,39 @@
+.chat-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.messages-container {
+    position: relative;
+    flex-grow: 1;
+}
+
+.scroll-container {
+    position: absolute;
+    inset: 0;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.chat-input {
+    border: 0px solid var(--frost-1);
+}
+
+.chat-text-input {
+    outline: none;
+    text-decoration-style: solid;
+    resize: none;
+    appearance: none;
+    border: none;
+    padding: 0.5em;
+    overflow: auto;
+}
+
+.yours {
+    color: var(--polar-night-0);
+}

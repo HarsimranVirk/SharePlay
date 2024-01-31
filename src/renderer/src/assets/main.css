@@ -1,0 +1,39 @@
+:root {
+    --polar-night-0: #2E3440;
+    --polar-night-1: #3B4252;
+    --polar-night-2: #434C5E;
+    --polar-night-3: #4C566A;
+
+    --snow-storm-0: #D8DEE9;
+    --snow-storm-1: #E5E9F0;
+    --snow-storm-2: #ECEFF4;
+
+    --frost-0: #8FBCBB;
+    --frost-1: #88C0D0;
+    --frost-2: #81A1C1;
+    --frost-3: #5E81AC;
+
+    --aurora-0: #BF616A;
+    --aurora-1: #D08770;
+    --aurora-2: #EBCB8B;
+    --aurora-3: #A3BE8C;
+    --aurora-4: #B48EAD;
+}
+
+*, html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.hide {
+    display: none;
+}

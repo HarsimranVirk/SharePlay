@@ -1,0 +1,14 @@
+.nord-input {
+    outline: none;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+    border-radius: 0.3em;
+    font-family: Verdana, sans-serif;
+    height: 2.5em;
+    width: calc(100%-4px);
+}
+
+.nord-input:focus {
+    border: 2px solid var(--frost-1);
+    border-radius: 0.3em;
+}
