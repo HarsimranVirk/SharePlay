@@ -3,6 +3,20 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
+// const handleCreateServer = (url) => {
+//   try {
+//     const parsedUrl = new URL(url)
+//     const hostname = parsedUrl.hostname
+//     const port = parsedUrl.port
+//     createServer(hostname, port)
+//     return `Server created at port ${url}`
+//   } catch (e) {
+//     if (e instanceof TypeError) {
+//       throw new Error('Invalid URL')
+//     }
+//   }
+// }
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({

@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Express } from 'express'
 import cors from 'cors'
 import expressWs from 'express-ws'
 import { app as electronApp } from 'electron'
@@ -6,13 +6,19 @@ import { serve, setup } from 'swagger-ui-express'
 import { router } from './routes'
 import YAML from 'yamljs'
 import spec from '../../resources/openapi.spec.yaml?asset'
+import { Server } from 'http'
 
-const server = {
+type ServerType = {
+  app: Express | null
+  httpServer: Server | null
+}
+
+const server: ServerType = {
   app: null,
   httpServer: null
 }
 
-function defineRoutes(app) {
+function defineRoutes(app: Express): Express {
   app.use(express.json())
   app.use(cors())
   app.use('/', router)
@@ -25,14 +31,14 @@ function defineRoutes(app) {
   return app
 }
 
-function createServer(hostname, port) {
+function createServer(hostname, port): void {
   closeServer()
   server.app = express()
-  const app = defineRoutes(server.app)
+  const app: Express = defineRoutes(server.app)
   server.httpServer = app.listen(port, hostname)
 }
 
-function closeServer() {
+function closeServer(): void {
   if (server.app !== null && server.httpServer !== null) {
     server.httpServer.close(() => console.log('Server shutdown'))
   }

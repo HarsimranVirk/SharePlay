@@ -3,6 +3,11 @@ import { createHash } from 'crypto'
 import * as fs from 'fs'
 import { app } from 'electron'
 
+type FileMetadataType = {
+  lastModified: string
+  fileSize: number
+}
+
 const router = Router()
 const hashCacheFilepath = app.getPath('userData') + 'checksums.cache'
 
@@ -24,7 +29,7 @@ const writeChecksums = (checksums) => {
   })
 }
 
-const getChecksum = (filepath) => {
+const getChecksum = (filepath: string): Promise<string> => {
   return new Promise((resolve) => {
     const chunkSize = 4096
     const md5hash = createHash('md5')
@@ -39,7 +44,7 @@ const getChecksum = (filepath) => {
   })
 }
 
-const getFileMetadata = (filepath) => {
+const getFileMetadata = (filepath): Promise<FileMetadataType> => {
   return new Promise((resolve) => {
     fs.stat(filepath, (err, stat) =>
       resolve({
