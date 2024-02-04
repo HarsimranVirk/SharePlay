@@ -1,16 +1,16 @@
 {
-    "$schema": "https://wixplosives.github.io/codux-config-schema/codux.config.schema.json",
-    "boardGlobalSetup": "./src/renderer/src/_codux/boards-global-setup.ts",
-    "boardsPath": "src/renderer/src/_codux/boards",
-    "scripts": {
-      "install": {
-        "title": "Install",
-        "description": "Run install",
-        "command": "npm i",
-        "trigger": ["checkout", "pull", "setup"]
-      }
-    },
-    "newComponent": {
-      "componentsPath": "src/renderer/src/components"
+  "$schema": "https://wixplosives.github.io/codux-config-schema/codux.config.schema.json",
+  "boardGlobalSetup": "./src/renderer/src/_codux/boards-global-setup.ts",
+  "boardsPath": "src/renderer/src/_codux/boards",
+  "scripts": {
+    "install": {
+      "title": "Install",
+      "description": "Run install",
+      "command": "npm i",
+      "trigger": ["checkout", "pull", "setup"]
     }
+  },
+  "newComponent": {
+    "componentsPath": "src/renderer/src/components"
   }
+}

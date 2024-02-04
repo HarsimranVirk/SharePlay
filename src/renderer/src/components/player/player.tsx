@@ -16,16 +16,16 @@ export const Player: React.FC<PlayerProps> = ({ className = '' }) => {
   const overlayRef = useRef<HTMLDivElement | null>(null)
   const [progress, setProgress] = useState(0)
   const [mouseHidden, setMouseHidden] = useState(false)
-  const timeout = useRef<string | number | NodeJS.Timeout | null>(null)
+  const hideCursorTimeout = useRef<string | number | NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    timeout.current = setTimeout(() => {
-      setMouseHidden(true)
+    hideCursorTimeout.current = setTimeout(() => {
+      if (playing) setMouseHidden(true)
     }, HIDE_MOUSE_AFTER)
     return () => {
-      if (timeout.current) clearTimeout(timeout.current)
+      if (hideCursorTimeout.current) clearTimeout(hideCursorTimeout.current)
     }
-  }, [mouseHidden])
+  }, [playing, mouseHidden])
 
   const handlePlaying = (): void => {
     setPlaying((p) => {
@@ -79,15 +79,26 @@ export const Player: React.FC<PlayerProps> = ({ className = '' }) => {
             )}
           </div>
           {/* @ts-ignore setting the --progress css variable */}
-          <div style={{ '--progress': `${progress}%` }} className="controls-bottom-bar">
-            <span className="progress-track"></span>
-            <span className="progress-bar"></span>
-            <span
-              className="thumb"
-              onMouseDown={(e) => console.log(e.clientX)}
-              onMouseMove={(e) => console.log(e.clientX)}
-              onMouseUp={(e) => console.log(e.clientX)}
-            ></span>
+          <div
+            style={{
+              '--progress': `${videoRef.current ? (progress / videoRef.current.duration) * 100 : 0}%`
+            }}
+            className="controls-bottom-bar"
+          >
+            <span className="controls-bottom-bar-done"></span>
+            <input
+              type="range"
+              min={0}
+              max={videoRef.current?.duration}
+              step="any"
+              value={progress}
+              onChange={(e) => {
+                if (videoRef.current) {
+                  videoRef.current.currentTime = parseFloat(e.target.value)
+                  setProgress(parseFloat(e.target.value))
+                }
+              }}
+            />
           </div>
         </div>
       </div>
@@ -98,7 +109,7 @@ export const Player: React.FC<PlayerProps> = ({ className = '' }) => {
         ref={videoRef}
         onTimeUpdate={() => {
           if (videoRef.current) {
-            setProgress((videoRef.current.currentTime / videoRef.current.duration) * 100)
+            setProgress(videoRef.current.currentTime)
           }
         }}
       />

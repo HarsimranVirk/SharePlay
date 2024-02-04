@@ -1,29 +1,29 @@
 .filled-button {
-    background-color: var(--frost-1);
-    /* Primary color for the button, you can customize this */
-    color: var(--polar-night-1);
-    /* Text color */
-    padding: 0.75em;
-    /* Adjust padding as needed */
-    border-radius: 4px;
-    /* Rounded corners */
-    border: 0;
-    cursor: pointer;
-    text-transform: uppercase;
-    /* Optional: Uppercase text */
-    font-weight: 500;
-    /* Optional: Adjust font weight */
-    transition: background-color 0.3s ease;
-    box-shadow: 0 0 3px var(--polar-night-3);
-    justify-content: center;
+  background-color: var(--frost-1);
+  /* Primary color for the button, you can customize this */
+  color: var(--polar-night-1);
+  /* Text color */
+  padding: 0.75em;
+  /* Adjust padding as needed */
+  border-radius: 4px;
+  /* Rounded corners */
+  border: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  /* Optional: Uppercase text */
+  font-weight: 500;
+  /* Optional: Adjust font weight */
+  transition: background-color 0.3s ease;
+  box-shadow: 0 0 3px var(--polar-night-3);
+  justify-content: center;
 }
 
 .filled-button:hover {
-    background-color: var(--frost-0);
-    transform: scale(1.05);
+  background-color: var(--frost-0);
+  transform: scale(1.05);
 }
 
 .filled-button:active {
-    background-color: var(--frost-0);
-    transform: scale(0.95);
+  background-color: var(--frost-0);
+  transform: scale(0.95);
 }

@@ -1,2 +1,2 @@
 // boards-global-setup.ts
-import '../assets/main.css';
+import '../assets/main.css'
