@@ -6,17 +6,17 @@
   border-radius: 20px;
   position: relative;
   display: inline-block;
+  max-width: 80%;
+  overflow-wrap: break-word;
   z-index: 0;
 }
 
 .message.mine {
   align-self: flex-end;
-  background-color: var(--frost-3);
+  background-color: var(--aurora-0);
   color: var(--snow-storm-2);
-  margin-left: 40px;
 }
 
 .message.yours {
   background-color: var(--snow-storm-0);
-  margin-right: 40px;
 }

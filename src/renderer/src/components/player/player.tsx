@@ -30,7 +30,7 @@ export const Player: React.FC<PlayerProps> = ({ className = '' }) => {
   const [mouseHidden, setMouseHidden] = useState(false)
   const [showRemaining, setShowRemaining] = useState(false)
   const hideCursorTimeout = useRef<string | number | NodeJS.Timeout | null>(null)
-  const [showChat, setShowChat] = useState(true)
+  const [showChat, setShowChat] = useState(false)
 
   useEffect(() => {
     hideCursorTimeout.current = setTimeout(() => {
@@ -76,13 +76,13 @@ export const Player: React.FC<PlayerProps> = ({ className = '' }) => {
     const chatListener = (e: KeyboardEvent): void => {
       if (e.code === 'Enter') setShowChat((s) => !s)
     }
-    window.addEventListener('keydown', chatListener)
-    if (!showChat) window.addEventListener('keydown', listener)
+    window.addEventListener('keydown', chatListener, false)
+    window.addEventListener('keydown', listener, false)
     return () => {
       window.removeEventListener('keydown', listener)
       window.removeEventListener('keydown', chatListener)
     }
-  }, [showChat, seekBackward, seekForward])
+  }, [seekBackward, seekForward])
 
   const toggleMute = (): void => {
     setVolume((v) => {

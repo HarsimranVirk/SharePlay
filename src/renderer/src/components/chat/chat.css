@@ -13,6 +13,8 @@
   position: relative;
   flex-grow: 1;
   border-radius: 0 0 20px 20px;
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .scroll-container {
@@ -28,8 +30,6 @@
 }
 
 .chat-input-container {
-  border: 0px solid var(--frost-1);
-  height: 4em;
   background: linear-gradient(var(--polar-night-0), var(--frost-3));
   margin-top: 2em;
   display: flex;
@@ -43,14 +43,16 @@
   gap: 2px;
   align-items: center;
   justify-content: stretch;
-  border: 2px solid var(--aurora-4);
-  margin: 0 10px;
+  border: 2px solid var(--frost-1);
+  margin: 20px 10px;
   border-radius: 20px;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 .chat-input-text {
-  height: 1em;
-  line-height: 1em;
+  height: 16px;
+  line-height: 16px;
   outline: none;
   flex-grow: 1;
   text-decoration-style: solid;
@@ -72,14 +74,11 @@
   margin: 0 10px;
   height: 100%;
   display: flex;
-  align-items: center;
   gap: 8px;
 }
 
 .chat-input-buttons > svg {
   cursor: pointer;
-}
-
-.yours {
-  color: var(--polar-night-0);
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
