@@ -1,9 +1,9 @@
 .message {
-  margin: 0.25em 0.6em;
-  padding: 0.6em;
+  margin: 10px 10px;
+  padding: 10px;
   font-weight: 100;
-  font-family: Verdana, sans-serif;
-  border-radius: 100px;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 20px;
   position: relative;
   display: inline-block;
   z-index: 0;
@@ -13,56 +13,10 @@
   align-self: flex-end;
   background-color: var(--frost-3);
   color: var(--snow-storm-2);
+  margin-left: 40px;
 }
 
 .message.yours {
   background-color: var(--snow-storm-0);
-}
-
-.message.yours.last:before {
-  content: '';
-  position: absolute;
-  z-index: -2;
-  bottom: 0;
-  left: -7px;
-  height: 20px;
-  width: 20px;
-  background: var(--snow-storm-0);
-  border-bottom-right-radius: 15px;
-}
-
-.message.yours.last:after {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  bottom: 0;
-  left: -10px;
-  width: 10px;
-  height: 20px;
-  background: var(--polar-night-3);
-  border-bottom-right-radius: 10px;
-}
-
-.message.mine.last:before {
-  content: '';
-  position: absolute;
-  z-index: -2;
-  bottom: 0;
-  right: -7px;
-  height: 20px;
-  width: 20px;
-  background: var(--frost-3);
-  border-bottom-left-radius: 15px;
-}
-
-.message.mine.last:after {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  bottom: 0;
-  right: -10px;
-  width: 10px;
-  height: 20px;
-  background: var(--polar-night-3);
-  border-bottom-left-radius: 10px;
+  margin-right: 40px;
 }
